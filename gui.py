@@ -27,11 +27,17 @@ class NameShaverApp:
 
         # Main controls
         tk.Label(self.root, text="Select Folder:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
-        tk.Entry(self.root, textvariable=self.folder_path, width=40).grid(row=1, column=1, padx=5, pady=5)
+        # Folder path display (read-only)
+        folder_frame = tk.Frame(self.root, bd=1, relief="sunken", bg="#fff")
+        folder_frame.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+        self.folder_label = tk.Label(folder_frame, textvariable=self.folder_path, anchor="w", width=40)
+        self.folder_label.pack(fill="both", expand=True)
         tk.Button(self.root, text="Browse", command=self.browse_folder).grid(row=1, column=2, padx=5, pady=5)
 
         tk.Label(self.root, text="Words to remove (comma-separated):").grid(row=2, column=0, padx=5, pady=5, sticky="e")
-        tk.Entry(self.root, textvariable=self.words_to_remove, width=40).grid(row=2, column=1, padx=5, pady=5)
+        # Save a reference to the entry so we can skip styling it
+        self.words_entry = tk.Entry(self.root, textvariable=self.words_to_remove, width=40, bg="#fff", fg="#000", font=("Arial", self.font_size.get()))
+        self.words_entry.grid(row=2, column=1, padx=5, pady=5)
 
         tk.Button(self.root, text="Shave Names", command=self.shave_names).grid(row=3, column=1, pady=10)
         tk.Button(self.root, text="Clear", command=self.clear_fields).grid(row=4, column=2, pady=10)
@@ -50,7 +56,9 @@ class NameShaverApp:
         self.root.geometry(f"{self.window_width.get()}x{self.window_height.get()}")
 
     def _set_widget_style(self, widget, font, fg, bg):
-        # Recursively apply styles to all widgets
+        # Skip custom-styled widgets
+        if widget is self.words_entry:
+            return
         if isinstance(widget, (tk.Label, tk.Button, tk.Entry, tk.Text, tk.Spinbox)):
             try:
                 widget.configure(font=font, fg=fg, bg=bg)
