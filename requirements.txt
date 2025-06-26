@@ -1,0 +1,2 @@
+# Only required if you want to use pyinstaller for packaging
+pyinstaller
