@@ -75,6 +75,7 @@ class NameShaverApp:
         folder = filedialog.askdirectory()
         if folder:
             self.folder_path.set(folder)
+            self.words_entry.focus_set()
 
     def shave_names(self):
         folder = self.folder_path.get()
